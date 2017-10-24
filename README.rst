@@ -15,9 +15,8 @@ How it works
 Usage
 -----
 
-::
-
-    Run set-wallpaper.cmd
+1. Download set-wallpaper.cmd and set-wallpaper.ps1.
+2. Run set-wallpaper.cmd
 
 Good way to run script periodically: using Windows task scheduler.
 
