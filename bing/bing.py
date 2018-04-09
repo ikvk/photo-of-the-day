@@ -1,18 +1,15 @@
-import os
 import json
-import ctypes
+import time
 from urllib import request, parse
 
 local_wallpaper_path = r'C:\Windows\Temp\bing_wp.jpg'
 
 
-def set_wallpaper(local_path):
-    os.system('REG ADD \"HKCU\Control Panel\Desktop\" /v Wallpaper /t REG_SZ /d \"{}\" /f'.format(local_path))
-    os.system('rundll32.exe user32.dll, UpdatePerUserSystemParameters')
-
-
-def set_wallpaper1(local_path):
-    return ctypes.windll.user32.SystemParametersInfoA(20, 0, local_path.encode("us-ascii"), 2)
+def set_wallpaper(path):
+    import ctypes
+    spi = 20
+    spif = 2
+    return ctypes.windll.user32.SystemParametersInfoA(spi, 0, path.encode("us-ascii"), spif)
 
 
 def download_bing_image_of_day(local_path):
@@ -40,7 +37,6 @@ if __name__ == '__main__':
     if downloaded:
         print('Wallpaper successfully downloaded:\n{}'.format(downloaded))
         set_wallpaper(local_wallpaper_path)
+        time.sleep(1)
     else:
         print('An error occurred while downloading wallpaper.')
-
-# https://github.com/search?p=1&q=python+set+windows+wallpaper&type=Repositories&utf8=%E2%9C%93
