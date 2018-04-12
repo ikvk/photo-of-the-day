@@ -1,15 +1,15 @@
 import json
 import time
+import ctypes
 from urllib import request, parse
 
 local_wallpaper_path = r'C:\Windows\Temp\bing_wp.jpg'
 
 
-def set_wallpaper(path):
-    import ctypes
+def set_wallpaper(local_path):
     spi = 20
     spif = 2
-    return ctypes.windll.user32.SystemParametersInfoA(spi, 0, path.encode("us-ascii"), spif)
+    return ctypes.windll.user32.SystemParametersInfoA(spi, 0, local_path.encode("us-ascii"), spif)
 
 
 def download_bing_image_of_day(local_path):
