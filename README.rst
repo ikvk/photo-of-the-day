@@ -1,15 +1,19 @@
 windows-wallpaper
 =================
 
-Utilities for download image of day from internet and set it as windows wallpaper.
+Utility for download image of day from internet and set it as windows wallpaper.
 
-**Bing**: Python 3 script without dependencies and .exe file, built by `pyinstaller <http://www.pyinstaller.org/>`_.
+**Bing** and **Yandex** sources are available.
 
-**Yandex**: Powershell+bat scripts. (now service is closed)
+You can use python 3 script without dependencies or .exe files, built by `pyinstaller <http://www.pyinstaller.org/>`_.
 
 
 Usage:
 ------
+
+::
+
+    python wallpaper.py yandex
 
 Good way to run script periodically: using Windows task scheduler:
 
