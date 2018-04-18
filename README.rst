@@ -3,7 +3,7 @@ windows-wallpaper
 
 Utility for download image of day from internet and set it as windows wallpaper.
 
-**Bing** and **Yandex** sources are available.
+**Bing**, **Yandex** and **NASA** sources are available.
 
 You can use python 3 script without dependencies or .exe files, built by `pyinstaller <http://www.pyinstaller.org/>`_.
 
