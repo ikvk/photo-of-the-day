@@ -14,6 +14,8 @@ Usage:
 ::
 
     python wallpaper.py yandex
+    python wallpaper.py bing
+    python wallpaper.py nasa
 
 Good way to run script periodically: using Windows task scheduler:
 
