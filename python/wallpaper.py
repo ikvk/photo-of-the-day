@@ -16,6 +16,8 @@ def set_wallpaper(local_path):
 
 def download_image_by_url(img_url, local_path):
     result = True
+    if not img_url:
+        raise ValueError('No url for download.')
     wb_data = request.urlopen(img_url)
     if wb_data.code == 200:
         with open(local_path, 'wb') as f:
@@ -47,7 +49,9 @@ def get_image_of_day_yandex():
             script_tag_dict = script_tag.groupdict()
             if 'restoreData' in script_tag_dict['attrs']:
                 script_data = json.loads(script_tag_dict['code'])
-                history_item = script_data['di']['photosDaily']['results'][0]['content'][0]['content']
+                card_id = script_data['di']['ReduxState']['contestCards']['results'][0]
+                history_item = script_data['di']\
+                    ['ReduxState']['entities']['cards'][card_id]['content'][0]['content']['avatars_key']
                 return 'https://avatars.mds.yandex.net/get-pdb/{group}/{id}/orig'.format(
                     group=history_item['group_id'], id=history_item['avatars_key'])
     return result
