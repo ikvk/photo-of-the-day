@@ -49,9 +49,9 @@ def get_image_of_day_yandex():
             script_tag_dict = script_tag.groupdict()
             if 'restoreData' in script_tag_dict['attrs']:
                 script_data = json.loads(script_tag_dict['code'])
-                card_id = script_data['di']['ReduxState']['contestCards']['results'][0]
+                card_id = script_data['di']['ReduxState']['contestCards']['results'][0]['id']
                 history_item = script_data['di']\
-                    ['ReduxState']['entities']['cards'][card_id]['content'][0]['content']['avatars_key']
+                    ['ReduxState']['entities']['cards'][card_id]['content'][0]['content']
                 return 'https://avatars.mds.yandex.net/get-pdb/{group}/{id}/orig'.format(
                     group=history_item['group_id'], id=history_item['avatars_key'])
     return result
