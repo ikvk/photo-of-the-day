@@ -16,8 +16,6 @@ def set_wallpaper(local_path):
 
 def download_image_by_url(img_url, local_path):
     result = True
-    if not img_url:
-        raise ValueError('No url for download.')
     wb_data = request.urlopen(img_url)
     if wb_data.code == 200:
         with open(local_path, 'wb') as f:
@@ -86,6 +84,10 @@ if __name__ == '__main__':
             get_image_of_day_function = get_image_of_day_nasa
     print('Setting wallpaper...')
     photo_url = get_image_of_day_function()
+    if not photo_url:
+        print('No url for download.')
+        time.sleep(2)
+        exit()
     print(photo_url)
     downloaded = download_image_by_url(photo_url, local_wallpaper_path)
     if downloaded:
