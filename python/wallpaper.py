@@ -25,7 +25,6 @@ def download_image_by_url(img_url, local_path):
 
 
 def get_image_of_day_bing():
-    result = None
     bing_url = 'https://www.bing.com'
     bing_api_url = '{bing_url}/HPImageArchive.aspx?{params}'.format(
         bing_url=bing_url, params=parse.urlencode(dict(format='js', idx='0', n='1', mkt='ru-RU')))
@@ -33,11 +32,10 @@ def get_image_of_day_bing():
     if api_data.code == 200:
         bing_data = json.loads(api_data.read().decode())
         return '{bing_url}{url}'.format(bing_url=bing_url, url=bing_data['images'][0]['url'])
-    return result
+    return None
 
 
 def get_image_of_day_yandex():
-    result = None
     history_req = request.Request('https://yandex.ru/collections/contest/photo-of-the-day/', headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'})
     api_data = request.urlopen(history_req)
@@ -48,15 +46,14 @@ def get_image_of_day_yandex():
             if 'restoreData' in script_tag_dict['attrs']:
                 script_data = json.loads(script_tag_dict['code'])
                 card_id = script_data['di']['ReduxState']['contestCards']['results'][0]['id']
-                history_item = script_data['di']\
+                history_item = script_data['di'] \
                     ['ReduxState']['entities']['cards'][card_id]['content'][0]['content']
                 return 'https://avatars.mds.yandex.net/get-pdb/{group}/{id}/orig'.format(
                     group=history_item['group_id'], id=history_item['avatars_key'])
-    return result
+    return None
 
 
 def get_image_of_day_nasa():
-    result = None
     ubernodes_url = 'https://www.nasa.gov/api/1/query/ubernodes.json?unType[]=image&routes[]=1446'
     ubernodes_data = request.urlopen(ubernodes_url)
     if ubernodes_data.code == 200:
@@ -68,7 +65,17 @@ def get_image_of_day_nasa():
             node = json.loads(node_data.read().decode())
             return 'https://www.nasa.gov/sites/default/files/thumbnails/image/{node}'.format(
                 node=node['images'][0]['filename'])
-    return result
+    return None
+
+
+def get_image_of_day_geo():
+    base_url = 'https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json'
+    base_data = request.urlopen(base_url)
+    if base_data.code == 200:
+        geo_data = json.loads(base_data.read().decode())
+        size = max(int(i) for i in geo_data['items'][0]['sizes'].keys())
+        return geo_data['items'][0]['url'] + geo_data['items'][0]['sizes'][str(size)]
+    return None
 
 
 if __name__ == '__main__':
@@ -82,6 +89,8 @@ if __name__ == '__main__':
             get_image_of_day_function = get_image_of_day_yandex
         elif image_src == 'nasa':
             get_image_of_day_function = get_image_of_day_nasa
+        elif image_src == 'geo':
+            get_image_of_day_function = get_image_of_day_geo
     print('Setting wallpaper...')
     photo_url = get_image_of_day_function()
     if not photo_url:
