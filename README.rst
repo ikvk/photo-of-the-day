@@ -17,12 +17,12 @@ Usage:
 
 ::
 
-    python wallpaper.py yandex
-    python wallpaper.py bing
-    python wallpaper.py nasa
-    python wallpaper.py geo
+    pythonw wallpaper.py yandex
+    pythonw wallpaper.py bing
+    pythonw wallpaper.py nasa
+    pythonw wallpaper.py geo
 
 Good way to run script periodically on windows: using task scheduler:
 
-1. Start scheduler: press WinKey+R -> control schedtasks
-2. Create task for run any script: wallpaper.py or wallpaper.exe
+#. Start scheduler: press WinKey+R -> control schedtasks
+#. Create task for run any script: wallpaper.py or wallpaper.exe

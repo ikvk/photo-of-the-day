@@ -24,7 +24,7 @@ def download_image_by_url(img_url, local_path):
     return result
 
 
-def get_image_of_day_bing():
+def get_bing_url():
     bing_url = 'https://www.bing.com'
     bing_api_url = '{bing_url}/HPImageArchive.aspx?{params}'.format(
         bing_url=bing_url, params=parse.urlencode(dict(format='js', idx='0', n='1', mkt='ru-RU')))
@@ -35,7 +35,7 @@ def get_image_of_day_bing():
     return None
 
 
-def get_image_of_day_yandex():
+def get_yandex_url():
     history_req = request.Request('https://yandex.ru/collections/contest/photo-of-the-day/', headers={
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'})
     api_data = request.urlopen(history_req)
@@ -53,7 +53,7 @@ def get_image_of_day_yandex():
     return None
 
 
-def get_image_of_day_nasa():
+def get_nasa_url():
     ubernodes_url = 'https://www.nasa.gov/api/1/query/ubernodes.json?unType[]=image&routes[]=1446'
     ubernodes_data = request.urlopen(ubernodes_url)
     if ubernodes_data.code == 200:
@@ -68,7 +68,7 @@ def get_image_of_day_nasa():
     return None
 
 
-def get_image_of_day_geo():
+def get_geo_url():
     base_url = 'https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json'
     base_data = request.urlopen(base_url)
     if base_data.code == 200:
@@ -79,27 +79,23 @@ def get_image_of_day_geo():
 
 
 if __name__ == '__main__':
-    # wallpaper source
-    get_image_of_day_function = get_image_of_day_yandex
-    if len(sys.argv) > 1:
-        image_src = sys.argv[1]
-        if image_src == 'bing':
-            get_image_of_day_function = get_image_of_day_bing
-        elif image_src == 'yandex':
-            get_image_of_day_function = get_image_of_day_yandex
-        elif image_src == 'nasa':
-            get_image_of_day_function = get_image_of_day_nasa
-        elif image_src == 'geo':
-            get_image_of_day_function = get_image_of_day_geo
-    print('Setting wallpaper...')
-    photo_url = get_image_of_day_function()
-    if not photo_url:
-        print('No url for download.')
+    wallpaper_sources = dict(
+        bing=get_bing_url,
+        yandex=get_yandex_url,
+        nasa=get_nasa_url,
+        geo=get_geo_url,
+    )
+    source = sys.argv[1] if len(sys.argv) > 1 and sys.argv[1] in wallpaper_sources else 'yandex'
+    get_url_function = wallpaper_sources[source]
+    print('Setting "{}" wallpaper...'.format(source))
+    wallpaper_url = get_url_function()
+    if not wallpaper_url:
+        print('Failed to retrieve url for download.')
         time.sleep(2)
         exit()
-    print(photo_url)
-    downloaded = download_image_by_url(photo_url, local_wallpaper_path)
-    if downloaded:
+    print(wallpaper_url)
+    is_downloaded = download_image_by_url(wallpaper_url, local_wallpaper_path)
+    if is_downloaded:
         print('Image saved to: {}'.format(local_wallpaper_path))
         result = set_wallpaper(local_wallpaper_path)
         print(ctypes.WinError() if result != 1 else 'Wallpaper installed.')
