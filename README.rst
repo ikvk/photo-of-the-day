@@ -1,7 +1,7 @@
-image-of-the-day
+photo-of-the-day
 ================
 
-Downloads image of day from collection of internet sources and set it as wallpaper on windows 10.
+Downloads photo of day from internet source collection and sets it as wallpaper on windows 10.
 
 This is python 3 script without dependencies.
 
