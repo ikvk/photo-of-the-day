@@ -1,9 +1,9 @@
-windows-wallpaper
-=================
+image-of-the-day
+================
 
-Utility for download image of day from internet and set it as windows wallpaper.
+Downloads image of day from collection of internet sources and set it as wallpaper on windows 10.
 
-You can use python 3 script without dependencies or .exe files, built by `pyinstaller <http://www.pyinstaller.org/>`_.
+This is python 3 script without dependencies.
 
 Available sources:
 ------------------
@@ -22,7 +22,10 @@ Usage:
     pythonw wallpaper.py nasa
     pythonw wallpaper.py geo
 
+Automate:
+---------
+
 Good way to run script periodically on windows: using task scheduler:
 
-#. Start scheduler: press WinKey+R -> control schedtasks
-#. Create task for run any script: wallpaper.py or wallpaper.exe
+#. Start scheduler: press WinKey+R -> "control schedtasks"
+#. Create task for run script
