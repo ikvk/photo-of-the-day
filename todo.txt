@@ -1,5 +1,7 @@
-https://cosmosmagazine.com/sections/image-of-the-day
-https://www.the-scientist.com/tag/image-of-the-day
-https://www.esa.int/Applications/Observing_the_Earth/Highlights/Image_of_the_Day
-http://www.esa.int/spaceinimages/Images
+http://www.esa.int/ESA_Multimedia/Images (https)
 https://apod.nasa.gov/apod/astropix.html
+
+do 3 func util:
+    get url
+    download
+    set wallpaper
