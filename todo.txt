@@ -1,5 +1,4 @@
 http://www.esa.int/ESA_Multimedia/Images (https)
-https://apod.nasa.gov/apod/astropix.html
 
 do 3 func util:
     get url

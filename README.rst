@@ -9,7 +9,8 @@ Available sources:
 ------------------
 - **Bing** - https://www.bing.com/
 - **Yandex** - https://yandex.ru/collections/contest/photo-of-the-day/
-- **NASA** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
+- **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
+- **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
 - **National geographic** - https://www.nationalgeographic.com/photography/photo-of-the-day/?source=sitenavpod
 
 Usage:
@@ -20,6 +21,7 @@ Usage:
     pythonw wallpaper.py yandex
     pythonw wallpaper.py bing
     pythonw wallpaper.py nasa
+    pythonw wallpaper.py astropix
     pythonw wallpaper.py geo
 
 Automate:

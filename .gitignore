@@ -1,3 +1,4 @@
 *.orig
 /.idea/
 note.txt
+test.py
