@@ -5,7 +5,8 @@ import time
 import ctypes
 from urllib import request, parse
 
-local_wallpaper_path = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
+PATH_TO_SAVE_WALLPAPER = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
+SLEEP_AFTER_ERROR_SEC = 2
 
 
 def set_win10_wallpaper(local_path: str):
@@ -44,12 +45,12 @@ def get_yandex_url() -> str or None:
     api_data = request.urlopen(history_req)
     if api_data.code == 200:
         history_page = api_data.read().decode()
-        for script_tag in re.finditer('<script(?P<attrs>.*?)>(?P<code>(.+?))</script>', history_page, re.DOTALL):
+        for script_tag in re.finditer('<script(?P<attrs>.*?)>(?P<code>(.*?))</script>', history_page, re.DOTALL):
             script_tag_dict = script_tag.groupdict()
             if 'restoreData' in script_tag_dict['attrs']:
                 script_data = json.loads(script_tag_dict['code'])
-                card_id = script_data['di']['ReduxState']['contestCards']['results'][0]['id']
-                history_item = script_data['di']['ReduxState']['entities']['cards'][card_id]['content'][0]['content']
+                card_id = script_data['contestCards']['results'][0]['id']
+                history_item = script_data['entities']['cards'][card_id]['content'][0]['content']
                 return 'https://avatars.mds.yandex.net/get-pdb/{group}/{id}/orig'.format(
                     group=history_item['group_id'], id=history_item['avatars_key'])
     return None
@@ -89,6 +90,12 @@ def get_geo_url() -> str or None:
     return None
 
 
+def exit_with_error(error_code: int, error_text: str):
+    print(error_text)
+    time.sleep(SLEEP_AFTER_ERROR_SEC)
+    exit(error_code)
+
+
 if __name__ == '__main__':
     wp_sources = dict(
         bing=get_bing_url,
@@ -97,38 +104,30 @@ if __name__ == '__main__':
         astropix=get_astropix_url,
         geo=get_geo_url,
     )
-    error_sleep_sec = 2
+
     # get source name
     source_name = ''
     if len(sys.argv) > 1 and sys.argv[1] in wp_sources:
         source_name = sys.argv[1]
         print('Source "{}" selected.'.format(source_name))
     else:
-        print('Choose wallpaper source name, available: [{}]'.format(', '.join(wp_sources.keys())))
-        time.sleep(error_sleep_sec)
-        exit(1)
+        exit_with_error(1, 'Choose wallpaper source name, available: [{}]'.format(', '.join(wp_sources.keys())))
     get_url_function = wp_sources[source_name]
     # get url
     wallpaper_url = get_url_function()
     if wallpaper_url:
         print('Image url received: "{}"'.format(wallpaper_url))
     else:
-        print('Failed to retrieve image url for download.')
-        time.sleep(error_sleep_sec)
-        exit(2)
+        exit_with_error(2, 'Failed to retrieve image url for download.')
     # download image
-    is_downloaded = download_image_by_url(wallpaper_url, local_wallpaper_path)
+    is_downloaded = download_image_by_url(wallpaper_url, PATH_TO_SAVE_WALLPAPER)
     if is_downloaded:
-        print('Image saved to: "{}"'.format(local_wallpaper_path))
+        print('Image saved to: "{}"'.format(PATH_TO_SAVE_WALLPAPER))
     else:
-        print('Failed to downloading wallpaper image.')
-        time.sleep(error_sleep_sec)
-        exit(3)
+        exit_with_error(3, 'Failed to downloading wallpaper image.')
     # set wallpaper
-    set_wp_result = set_win10_wallpaper(local_wallpaper_path)
+    set_wp_result = set_win10_wallpaper(PATH_TO_SAVE_WALLPAPER)
     if set_wp_result == 1:
         print('Wallpaper installed successfully.')
     else:
-        print('Failed to set wallpaper: {}'.format(ctypes.WinError()))
-        time.sleep(error_sleep_sec)
-        exit(4)
+        exit_with_error(4, 'Failed to set wallpaper: {}'.format(ctypes.WinError()))
