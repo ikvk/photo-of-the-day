@@ -1,6 +1,1 @@
-http://www.esa.int/ESA_Multimedia/Images (https)
-
-do 3 func util:
-    get url
-    download
-    set wallpaper
+I will be happy to learn about new interesting sources!

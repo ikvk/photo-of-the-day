@@ -57,17 +57,16 @@ def get_yandex_url() -> str or None:
 
 
 def get_nasa_url() -> str or None:
-    ubernodes_url = 'https://www.nasa.gov/api/1/query/ubernodes.json?unType[]=image&routes[]=1446'
+    base_url = 'https://www.nasa.gov'
+    ubernodes_url = '{}/api/1/query/ubernodes.json?unType[]=image&routes[]=1446'.format(base_url)
     ubernodes_data = request.urlopen(ubernodes_url)
     if ubernodes_data.code == 200:
         ubernodes = json.loads(ubernodes_data.read().decode())
-        nid = ubernodes['ubernodes'][0]['nid']
-        node_url = 'https://www.nasa.gov/api/1/record/node/{nid}.json'.format(nid=nid)
+        node_url = '{}/api/1/record/node/{}.json'.format(base_url, ubernodes['ubernodes'][0]['nid'])
         node_data = request.urlopen(node_url)
         if node_data.code == 200:
             node = json.loads(node_data.read().decode())
-            return 'https://www.nasa.gov/sites/default/files/thumbnails/image/{node}'.format(
-                node=node['images'][0]['filename'])
+            return '{}{}'.format(base_url, node['images'][0]['fullWidthFeature'])
     return None
 
 
