@@ -12,6 +12,7 @@ Available sources:
 - **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
 - **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
 - **National geographic** - https://www.nationalgeographic.com/photography/photo-of-the-day/?source=sitenavpod
+- **ESA** - http://www.esa.int/ESA_Multimedia/Images
 
 Usage:
 ------

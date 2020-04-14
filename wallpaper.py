@@ -72,12 +72,12 @@ def get_nasa_url() -> str or None:
 
 
 def get_astropix_url() -> str or None:
-    base_url = 'https://apod.nasa.gov/apod/astropix.html'
-    base_data = request.urlopen(base_url)
+    base_url = 'https://apod.nasa.gov/apod/'
+    base_data = request.urlopen('{}{}'.format(base_url, 'astropix.html'))
     if base_data.code == 200:
         url_match = re.search(r'<IMG\s+SRC=\"(?P<url>.+?)\"', base_data.read().decode(), re.IGNORECASE)
         if url_match:
-            return 'https://apod.nasa.gov/apod/{}'.format(url_match.groupdict()['url'])
+            return '{}{}'.format(base_url, url_match.groupdict()['url'])
     return None
 
 
@@ -87,6 +87,24 @@ def get_geo_url() -> str or None:
     if base_data.code == 200:
         geo_data = json.loads(base_data.read().decode())
         return geo_data['items'][0]['image']['uri']
+    return None
+
+
+def get_esa_url() -> str or None:
+    base_url = 'http://www.esa.int'
+    page1_data = request.urlopen('{}/ESA_Multimedia/Images'.format(base_url))
+    if page1_data.code == 200:
+        url1_match = re.search(
+            r'<a\s+class=\"cta\s+popup\"\s+href=\"(?P<url>.+?)\"',
+            page1_data.read().decode(), re.IGNORECASE)
+        if url1_match:
+            page2_data = request.urlopen('{}{}'.format(base_url, url1_match.groupdict()['url']))
+            if page2_data.code == 200:
+                url2_match = re.search(
+                    r'<meta\s+property=\"og:image\"\s+content=\"(?P<url>.+?)\"',
+                    page2_data.read().decode(), re.IGNORECASE)
+                if url1_match:
+                    return url2_match.groupdict()['url']
     return None
 
 
@@ -101,6 +119,7 @@ if __name__ == '__main__':
         bing=get_bing_url,
         yandex=get_yandex_url,
         nasa=get_nasa_url,
+        esa=get_esa_url,
         astropix=get_astropix_url,
         geo=get_geo_url,
     )
