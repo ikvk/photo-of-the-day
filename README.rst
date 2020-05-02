@@ -24,6 +24,7 @@ Usage:
     pythonw wallpaper.py nasa
     pythonw wallpaper.py astropix
     pythonw wallpaper.py geo
+    pythonw wallpaper.py esa
 
 Automate:
 ---------
