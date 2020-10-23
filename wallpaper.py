@@ -39,20 +39,51 @@ def get_bing_url() -> str or None:
     return None
 
 
-def get_yandex_url() -> str or None:
-    history_req = request.Request('https://yandex.ru/collections/contest/photo-of-the-day/', headers={
-        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:59.0) Gecko/20100101 Firefox/59.0'})
-    api_data = request.urlopen(history_req)
-    if api_data.code == 200:
-        history_page = api_data.read().decode()
-        for script_tag in re.finditer('<script(?P<attrs>.*?)>(?P<code>(.*?))</script>', history_page, re.DOTALL):
-            script_tag_dict = script_tag.groupdict()
-            if 'restoreData' in script_tag_dict['attrs']:
-                script_data = json.loads(script_tag_dict['code'])
-                card_id = script_data['contestCards']['results'][0]['id']
-                history_item = script_data['entities']['cards'][card_id]['content'][0]['content']
-                return 'https://avatars.mds.yandex.net/get-pdb/{group}/{id}/orig'.format(
-                    group=history_item['group_id'], id=history_item['avatars_key'])
+def get_35photo_url() -> str or None:
+    base_url = 'https://ru.35photo.pro/rating/photo_day/'
+    genre_map = {  # noqa
+        408: 'Абстракция',
+        409: 'Аэрофотосъёмка',
+        108: 'Без категории',
+        97: 'Гламур',
+        101: 'Город/Архитектура',
+        114: 'Жанровый портрет',
+        507: 'Женский портрет',
+        103: 'Животные',
+        397: 'Концептуальное',
+        102: 'Макро',
+        506: 'Мужской портрет',
+        104: 'Натюрморт',
+        414: 'Ночь',
+        98: 'Ню',
+        99: 'Пейзаж',
+        402: 'Пленка',
+        109: 'Подводный мир',
+        96: 'Портрет',
+        415: 'Постановочная фотография',
+        396: 'Семейная фотография',
+        105: 'Спорт',
+        94: 'Стрит/Репортаж',
+        400: 'Черно-Белое',
+    }
+    genre_white_list = [409, 101, 103, 102, 104, 414, 99, 109, 94]  # no nude
+    base_data = request.urlopen(base_url)
+    if base_data.code == 200:
+        url_match = re.search(r'"https://(?P<url>\S+?)#cat0"', base_data.read().decode())
+        if url_match:
+            detail_url = 'https://{}#cat0'.format(url_match.groupdict()['url'])
+            detail_data = request.urlopen(detail_url)
+            if detail_data.code == 200:
+                detail_data_str = detail_data.read().decode()
+                genre_match = re.search(r':\s+<a href="https://35photo.pro/genre_(?P<genre>\d+)/">', detail_data_str)
+                if genre_match:
+                    genre = int(genre_match.groupdict()['genre'])
+                    if genre not in genre_white_list:
+                        return None
+                main_pref = r'https://m1.35photo.pro/photos_main/'
+                photo_match = re.search(r'"{}(?P<photo>\S+?)"'.format(main_pref), detail_data_str)
+                if photo_match:
+                    return '{}{}'.format(main_pref, photo_match.groupdict()['photo'])
     return None
 
 
@@ -114,14 +145,14 @@ def exit_with_error(error_code: int, error_text: str):
 
 
 if __name__ == '__main__':
-    wp_sources = dict(
-        bing=get_bing_url,
-        yandex=get_yandex_url,
-        nasa=get_nasa_url,
-        esa=get_esa_url,
-        astropix=get_astropix_url,
-        geo=get_geo_url,
-    )
+    wp_sources = {
+        'bing': get_bing_url,
+        '35photo': get_35photo_url,
+        'nasa': get_nasa_url,
+        'esa': get_esa_url,
+        'astropix': get_astropix_url,
+        'geo': get_geo_url,
+    }
 
     # get source name
     source_name = ''

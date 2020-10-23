@@ -8,7 +8,7 @@ This is python 3 script without dependencies.
 Available sources:
 ------------------
 - **Bing** - https://www.bing.com/
-- **Yandex** - https://yandex.ru/collections/contest/photo-of-the-day/
+- **35photo** - https://ru.35photo.pro/rating/photo_day/
 - **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
 - **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
 - **National geographic** - https://www.nationalgeographic.com/photography/photo-of-the-day/?source=sitenavpod
@@ -19,7 +19,7 @@ Usage:
 
 ::
 
-    pythonw wallpaper.py yandex
+    pythonw wallpaper.py 35photo
     pythonw wallpaper.py bing
     pythonw wallpaper.py nasa
     pythonw wallpaper.py astropix
