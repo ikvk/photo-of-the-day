@@ -112,11 +112,13 @@ def get_astropix_url() -> str or None:
 
 
 def get_geo_url() -> str or None:
-    base_url = 'https://www.nationalgeographic.com/photography/photo-of-the-day/_jcr_content/.gallery.json'
+    base_url = 'https://www.nationalgeographic.co.uk/photo-of-day'
     base_data = request.urlopen(base_url)
     if base_data.code == 200:
-        geo_data = json.loads(base_data.read().decode())
-        return geo_data['items'][0]['image']['uri']
+        data = base_data.read().decode()
+        match = re.search(r'<IMG.+?SRC=\"(?P<url>.+?)\".+?loading=\"lazy\".*?/>', data, re.IGNORECASE | re.DOTALL)
+        if match:
+            return match.groupdict()['url'].split('?')[0]
     return None
 
 
