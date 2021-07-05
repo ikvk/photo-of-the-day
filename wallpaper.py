@@ -80,7 +80,7 @@ def get_35photo_url() -> str or None:
                     genre = int(genre_match.groupdict()['genre'])
                     if genre not in genre_white_list:
                         return None
-                main_pref = r'https://m1.35photo.pro/photos_main/'
+                main_pref = r'https://35photo.pro/photos_main/'
                 photo_match = re.search(r'"{}(?P<photo>\S+?)"'.format(main_pref), detail_data_str)
                 if photo_match:
                     return '{}{}'.format(main_pref, photo_match.groupdict()['photo'])
