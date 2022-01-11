@@ -123,7 +123,7 @@ def get_geo_url() -> str or None:
 
 
 def get_esa_url() -> str or None:
-    base_url = 'http://www.esa.int'
+    base_url = 'https://www.esa.int'
     page1_data = request.urlopen('{}/ESA_Multimedia/Images'.format(base_url))
     if page1_data.code == 200:
         url1_match = re.search(
