@@ -116,7 +116,7 @@ def get_geo_url() -> str or None:
     base_data = request.urlopen(base_url)
     if base_data.code == 200:
         data = base_data.read().decode()
-        match = re.search(r'<IMG.+?SRC=\"(?P<url>.+?)\".+?loading=\"lazy\".*?/>', data, re.IGNORECASE | re.DOTALL)
+        match = re.search(r'<IMG.+?SRC=\"(?P<url>.+?)\"', data, re.IGNORECASE | re.DOTALL)
         if match:
             return match.groupdict()['url'].split('?')[0]
     return None
