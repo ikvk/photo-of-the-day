@@ -27,7 +27,8 @@ def download_all():
 
 def view_all_in_browser():
     for url in get_all_urls():
-        webbrowser.open(url, new=2)
+        if url:
+            webbrowser.open(url, new=2)
 
 
 # get_all_urls()
