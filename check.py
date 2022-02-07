@@ -36,3 +36,5 @@ view_all_in_browser()
 # download_all()
 # print(get_yandex_url())
 # print(get_geo_url())
+
+# https://www.deviantart.com/topic/science-fiction

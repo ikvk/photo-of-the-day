@@ -28,6 +28,73 @@ def download_image_by_url(img_url: str, local_path: str) -> bool:
         return False
 
 
+def get_artstation_url():
+    # id: title
+    channels = {
+        'character_design': 'Character Design',  # Дизайн персонажа
+        'concept_art': 'Concept Art',  # Концепт-арт
+        'realism': 'Realism',  # Реализм
+        'architectural_visualization': 'Architectural Visualization',  # Архитектурная Визуализация
+        'character_animation': 'Character Animation',  # Анимация персонажей
+        'toys_collectibles': 'Toys & Collectibles',  # Игрушки и Предметы коллекционирования
+        'abstract': 'Abstract',  # Абстрактный
+        'anatomy': 'Anatomy',  # Анатомия
+        'animals_wildlife': 'Animals & Wildlife',  # Животные и дикая природа
+        'anime_manga': 'Anime & Manga',  # Аниме и Манга
+        'architectural_concepts': 'Architectural Concepts',  # Архитектурные Концепции
+        'automotive': 'Automotive',  # Автомобильный
+        'board_and_card_game_art': 'Board and Card Game Art',  # Искусство настольных и карточных игр
+        'book_illustration': 'Book Illustration',  # Книжная иллюстрация
+        'character_modeling': 'Character Modeling',  # Моделирование персонажей
+        'childrens_art': "Children's Art",  # Детское искусство
+        'comic_art': 'Comic Art',  # Комическое Искусство
+        'cover_art': 'Cover Art',  # Обложка
+        'creatures_and_monsters': 'Creatures & Monsters',  # Существа и Монстры
+        'editorial_illustration': 'Editorial Illustration',  # Редакционная иллюстрация
+        'environmental_concept_design': 'Environmental Concept Art & Design',  # Экологический Концепт-Арт и дизайн
+        'fan_art': 'Fan Art',  # Фан-арт
+        'fantasy': 'Fantasy',  # Фантазия
+        'fashion_and_costume_design': 'Fashion & Costume Design',  # Мода и Дизайн костюмов
+        'game_art': 'Game Art',  # Игровое искусство
+        'gameplay_and_level_design': 'Gameplay & Level Design',  # Геймплей и Дизайн уровней
+        'games_real-time_3d_environment': 'Games and Real-Time 3D Environment Art',  # Игры и 3D-окружение
+        'graphic_design': 'Graphic Design',  # Графический Дизайн
+        'hard_surface': 'Hard Surface',  # Твердая Поверхность
+        'horror': 'Horror',  # Ужас
+        'illustration': 'Illustration',  # Иллюстрация
+        'industrial_and_product_design': 'Industrial & Product Design',  # Промышленный дизайн и дизайн продукции
+        'lighting': 'Lighting',  # Освещение
+        'matte_painting': 'Matte Painting',  # Матовая Покраска
+        'mecha': 'Mecha',  # Механизм
+        'mechanical_design': 'Mechanical Design',  # Механическая конструкция
+        'motion_graphics': 'Motion Graphics',  # Графика движения
+        'photogrammetry_3d_scanning': 'Photogrammetry & 3D Scanning',  # Фотограмметрия и 3D-сканирование
+        'pixel_voxel': 'Pixel & Voxel',  # Пиксель и Воксель
+        'portraits': 'Portraits',  # Портреты
+        'props': 'Props',  # Реквизит
+        'science_fiction': 'Science Fiction',  # научная фантастика
+        'scientific_visualization': 'Scientific Illustration & Visualization',  # Научная иллюстрация и Визуализация
+        'scripts_tools': 'Scripts & Tools',  # Скрипты и инструменты
+        'sketches': 'Sketches',  # Эскизы
+        'still_life': 'Still Life',  # Натюрморт
+        'storyboards': 'Storyboards',  # Раскадровки
+        'stylized': 'Stylized',  # Стилизованный
+        'technical_art': 'Technical Art',  # Техническое искусство
+        'textures_materials': 'Textures & Materials',  # Текстуры и материалы
+        'TheArtofHALOInfinite': 'The Art of  HALO Infinite',  # Искусство бесконечного ореола
+        'tutorials': 'Tutorials',  # Учебные пособия
+        'user_interface': 'User Interface',  # Пользовательский интерфейс
+        'vehicles': 'Vehicles',  # Транспортные средства
+        'vfx_for_film_tv_animation': 'VFX for Film, TV & Animation ',  # VFX для кино, телевидения и анимации
+        'vfx_for_realtime_and_games': 'VFX for Real-Time & Games',  # VFX для реального времени и игр
+        'virtual_and_augmented_reality': 'Virtual and Augmented Reality',  # Виртуальная и дополненная реальность
+        'visual_development': 'Visual Development',  # Визуальное Развитие
+        'weapons': 'Weapons',  # Оружие
+        'web_app_design': 'Web and App Design',  # Веб-дизайн и дизайн приложений
+        'unreal': 'unreal engine',  # unreal engine
+    }
+
+
 def get_bing_url() -> str or None:
     bing_url = 'https://www.bing.com'
     bing_api_url = '{bing_url}/HPImageArchive.aspx?{params}'.format(
