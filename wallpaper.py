@@ -3,10 +3,10 @@ import sys
 import json
 import time
 import ctypes
+import datetime
 from urllib import request, parse
 
 PATH_TO_SAVE_WALLPAPER = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
-SLEEP_AFTER_ERROR_SEC = 2
 
 
 def set_win10_wallpaper(local_path: str):
@@ -26,6 +26,95 @@ def download_image_by_url(img_url: str, local_path: str) -> bool:
         return True
     else:
         return False
+
+
+def get_artstation_url() -> str or None:
+    channels = {  # noqa
+        70: 'Abstract',
+        69: 'Anatomy',
+        71: 'Animals & Wildlife',
+        72: 'Anime & Manga',
+        101: 'Architectural Concepts',  #
+        73: 'Architectural Visualization',
+        128: 'Automotive',
+        103: 'Board and Card Game Art',
+        104: 'Book Illustration',
+        105: 'Character Animation',
+        74: 'Character Design',
+        75: 'Character Modeling',
+        77: "Children's Art",
+        78: 'Comic Art',
+        79: 'Concept Art',  #
+        84: 'Cover Art',
+        80: 'Creatures & Monsters',
+        76: 'Editorial Illustration',
+        81: 'Environmental Concept Art & Design',  #
+        82: 'Fan Art',
+        83: 'Fantasy',
+        106: 'Fashion & Costume Design',
+        85: 'Game Art',
+        107: 'Gameplay & Level Design',
+        108: 'Games and Real-Time 3D Environment Art',
+        87: 'Graphic Design',
+        109: 'Hard Surface',
+        86: 'Horror',
+        88: 'Illustration',
+        89: 'Industrial & Product Design',
+        90: 'Lighting',
+        91: 'Matte Painting',
+        92: 'Mecha',  #
+        110: 'Mechanical Design',  #
+        111: 'Motion Graphics',
+        112: 'Photogrammetry & 3D Scanning',
+        93: 'Pixel & Voxel',
+        113: 'Portraits',
+        94: 'Props',
+        114: 'Realism',
+        95: 'Science Fiction',  #
+        115: 'Scientific Illustration & Visualization',
+        116: 'Scripts & Tools',
+        117: 'Sketches',
+        118: 'Still Life',
+        96: 'Storyboards',
+        119: 'Stylized',
+        120: 'Technical Art',
+        97: 'Textures & Materials',
+        6212: 'The Art of  HALO Infinite',
+        121: 'Toys & Collectibles',
+        98: 'Tutorials',
+        127: 'Unreal Engine',
+        99: 'User Interface',
+        100: 'Vehicles',  #
+        122: 'VFX for Film, TV & Animation ',
+        123: 'VFX for Real-Time & Games',
+        124: 'Virtual and Augmented Reality',
+        125: 'Visual Development',
+        126: 'Weapons',  #
+        102: 'Web and App Design',
+        6278: 'The Art of  Rainbow6 Extraction',
+        6291: "The Art of Marvel's  Guardians of the  Galaxy"
+    }
+    channel_white_list = [95, 101, 79, 81, 100, 92, 110, 126]
+    channel_data_url = 'https://www.artstation.com/api/v2/community/channels/projects.json?' \
+                       'channel_id={}&page=1&sorting=trending&dimension=all&per_page=30'
+    req_heads = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0", }
+    results = []
+    for channel_id in channel_white_list:
+        channel_data_req = request.Request(channel_data_url.format(channel_id), headers=req_heads)
+        channel_data_raw = request.urlopen(channel_data_req)
+        if channel_data_raw.code == 200:
+            channel_data = json.loads(channel_data_raw.read().decode())
+            art_hash = channel_data['data'][0]['url'].split('/')[-1]
+            art_data_url = 'https://www.artstation.com/projects/{}.json'.format(art_hash)
+            art_data_req = request.Request(art_data_url, headers=req_heads)
+            art_data = json.loads(request.urlopen(art_data_req).read().decode())
+            art_url = art_data['assets'][0]['image_url']
+            pub_date = datetime.datetime.strptime(art_data['published_at'][:10], '%Y-%m-%d').date()
+            if pub_date >= datetime.date.today() - datetime.timedelta(days=1):
+                return art_url
+            else:
+                results.append((pub_date, art_url))
+    return sorted(results, key=lambda x: x[0])[-1][1] or None
 
 
 def get_bing_url() -> str or None:
@@ -142,14 +231,20 @@ def get_esa_url() -> str or None:
 
 def exit_with_error(error_code: int, error_text: str):
     print(error_text)
-    time.sleep(SLEEP_AFTER_ERROR_SEC)
+    py_path = sys.executable or ''  # absolute path of the executable binary for the Python interpreter
+    if py_path.endswith('pythonw.exe') or py_path.endswith('pythonw'):
+        # no console
+        time.sleep(3)
+    else:
+        # visible console
+        pass
     exit(error_code)
 
 
 if __name__ == '__main__':
     wp_sources = {
+        'artstation': get_artstation_url,
         'bing': get_bing_url,
-        '35photo': get_35photo_url,
         'nasa': get_nasa_url,
         'esa': get_esa_url,
         'astropix': get_astropix_url,
