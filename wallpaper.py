@@ -233,7 +233,7 @@ def exit_with_error(error_code: int, error_text: str):
     print(error_text)
     py_path = sys.executable or ''  # absolute path of the executable binary for the Python interpreter
     if py_path.endswith('pythonw.exe') or py_path.endswith('pythonw'):
-        # now console
+        # no console
         time.sleep(3)
     else:
         # visible console
