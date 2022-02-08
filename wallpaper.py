@@ -3,6 +3,7 @@ import sys
 import json
 import time
 import ctypes
+import datetime
 from urllib import request, parse
 
 PATH_TO_SAVE_WALLPAPER = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
@@ -29,70 +30,92 @@ def download_image_by_url(img_url: str, local_path: str) -> bool:
 
 
 def get_artstation_url():
-    # id: title
-    channels = {
-        'character_design': 'Character Design',  # Дизайн персонажа
-        'concept_art': 'Concept Art',  # Концепт-арт
-        'realism': 'Realism',  # Реализм
-        'architectural_visualization': 'Architectural Visualization',  # Архитектурная Визуализация
-        'character_animation': 'Character Animation',  # Анимация персонажей
-        'toys_collectibles': 'Toys & Collectibles',  # Игрушки и Предметы коллекционирования
-        'abstract': 'Abstract',  # Абстрактный
-        'anatomy': 'Anatomy',  # Анатомия
-        'animals_wildlife': 'Animals & Wildlife',  # Животные и дикая природа
-        'anime_manga': 'Anime & Manga',  # Аниме и Манга
-        'architectural_concepts': 'Architectural Concepts',  # Архитектурные Концепции
-        'automotive': 'Automotive',  # Автомобильный
-        'board_and_card_game_art': 'Board and Card Game Art',  # Искусство настольных и карточных игр
-        'book_illustration': 'Book Illustration',  # Книжная иллюстрация
-        'character_modeling': 'Character Modeling',  # Моделирование персонажей
-        'childrens_art': "Children's Art",  # Детское искусство
-        'comic_art': 'Comic Art',  # Комическое Искусство
-        'cover_art': 'Cover Art',  # Обложка
-        'creatures_and_monsters': 'Creatures & Monsters',  # Существа и Монстры
-        'editorial_illustration': 'Editorial Illustration',  # Редакционная иллюстрация
-        'environmental_concept_design': 'Environmental Concept Art & Design',  # Экологический Концепт-Арт и дизайн
-        'fan_art': 'Fan Art',  # Фан-арт
-        'fantasy': 'Fantasy',  # Фантазия
-        'fashion_and_costume_design': 'Fashion & Costume Design',  # Мода и Дизайн костюмов
-        'game_art': 'Game Art',  # Игровое искусство
-        'gameplay_and_level_design': 'Gameplay & Level Design',  # Геймплей и Дизайн уровней
-        'games_real-time_3d_environment': 'Games and Real-Time 3D Environment Art',  # Игры и 3D-окружение
-        'graphic_design': 'Graphic Design',  # Графический Дизайн
-        'hard_surface': 'Hard Surface',  # Твердая Поверхность
-        'horror': 'Horror',  # Ужас
-        'illustration': 'Illustration',  # Иллюстрация
-        'industrial_and_product_design': 'Industrial & Product Design',  # Промышленный дизайн и дизайн продукции
-        'lighting': 'Lighting',  # Освещение
-        'matte_painting': 'Matte Painting',  # Матовая Покраска
-        'mecha': 'Mecha',  # Механизм
-        'mechanical_design': 'Mechanical Design',  # Механическая конструкция
-        'motion_graphics': 'Motion Graphics',  # Графика движения
-        'photogrammetry_3d_scanning': 'Photogrammetry & 3D Scanning',  # Фотограмметрия и 3D-сканирование
-        'pixel_voxel': 'Pixel & Voxel',  # Пиксель и Воксель
-        'portraits': 'Portraits',  # Портреты
-        'props': 'Props',  # Реквизит
-        'science_fiction': 'Science Fiction',  # научная фантастика
-        'scientific_visualization': 'Scientific Illustration & Visualization',  # Научная иллюстрация и Визуализация
-        'scripts_tools': 'Scripts & Tools',  # Скрипты и инструменты
-        'sketches': 'Sketches',  # Эскизы
-        'still_life': 'Still Life',  # Натюрморт
-        'storyboards': 'Storyboards',  # Раскадровки
-        'stylized': 'Stylized',  # Стилизованный
-        'technical_art': 'Technical Art',  # Техническое искусство
-        'textures_materials': 'Textures & Materials',  # Текстуры и материалы
-        'TheArtofHALOInfinite': 'The Art of  HALO Infinite',  # Искусство бесконечного ореола
-        'tutorials': 'Tutorials',  # Учебные пособия
-        'user_interface': 'User Interface',  # Пользовательский интерфейс
-        'vehicles': 'Vehicles',  # Транспортные средства
-        'vfx_for_film_tv_animation': 'VFX for Film, TV & Animation ',  # VFX для кино, телевидения и анимации
-        'vfx_for_realtime_and_games': 'VFX for Real-Time & Games',  # VFX для реального времени и игр
-        'virtual_and_augmented_reality': 'Virtual and Augmented Reality',  # Виртуальная и дополненная реальность
-        'visual_development': 'Visual Development',  # Визуальное Развитие
-        'weapons': 'Weapons',  # Оружие
-        'web_app_design': 'Web and App Design',  # Веб-дизайн и дизайн приложений
-        'unreal': 'unreal engine',  # unreal engine
+    channels = {  # noqa
+        70: 'Abstract',
+        69: 'Anatomy',
+        71: 'Animals & Wildlife',
+        72: 'Anime & Manga',
+        101: 'Architectural Concepts',  #
+        73: 'Architectural Visualization',
+        128: 'Automotive',
+        103: 'Board and Card Game Art',
+        104: 'Book Illustration',
+        105: 'Character Animation',
+        74: 'Character Design',
+        75: 'Character Modeling',
+        77: "Children's Art",
+        78: 'Comic Art',
+        79: 'Concept Art',  #
+        84: 'Cover Art',
+        80: 'Creatures & Monsters',
+        76: 'Editorial Illustration',
+        81: 'Environmental Concept Art & Design',  #
+        82: 'Fan Art',
+        83: 'Fantasy',
+        106: 'Fashion & Costume Design',
+        85: 'Game Art',
+        107: 'Gameplay & Level Design',
+        108: 'Games and Real-Time 3D Environment Art',
+        87: 'Graphic Design',
+        109: 'Hard Surface',
+        86: 'Horror',
+        88: 'Illustration',
+        89: 'Industrial & Product Design',
+        90: 'Lighting',
+        91: 'Matte Painting',
+        92: 'Mecha',  #
+        110: 'Mechanical Design',  #
+        111: 'Motion Graphics',
+        112: 'Photogrammetry & 3D Scanning',
+        93: 'Pixel & Voxel',
+        113: 'Portraits',
+        94: 'Props',
+        114: 'Realism',
+        95: 'Science Fiction',  #
+        115: 'Scientific Illustration & Visualization',
+        116: 'Scripts & Tools',
+        117: 'Sketches',
+        118: 'Still Life',
+        96: 'Storyboards',
+        119: 'Stylized',
+        120: 'Technical Art',
+        97: 'Textures & Materials',
+        6212: 'The Art of  HALO Infinite',
+        121: 'Toys & Collectibles',
+        98: 'Tutorials',
+        127: 'Unreal Engine',
+        99: 'User Interface',
+        100: 'Vehicles',  #
+        122: 'VFX for Film, TV & Animation ',
+        123: 'VFX for Real-Time & Games',
+        124: 'Virtual and Augmented Reality',
+        125: 'Visual Development',
+        126: 'Weapons',  #
+        102: 'Web and App Design',
+        6278: 'The Art of  Rainbow6 Extraction',
+        6291: "The Art of Marvel's  Guardians of the  Galaxy"
     }
+    channel_white_list = [95, 101, 79, 81, 100, 92, 110, 126]
+    channel_data_url = 'https://www.artstation.com/api/v2/community/channels/projects.json?' \
+                       'channel_id={}&page=1&sorting=trending&dimension=all&per_page=30'
+    req_heads = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0", }
+    results = []
+    for channel_id in channel_white_list:
+        channel_data_req = request.Request(channel_data_url.format(channel_id), headers=req_heads)
+        channel_data_raw = request.urlopen(channel_data_req)
+        if channel_data_raw.code == 200:
+            channel_data = json.loads(channel_data_raw.read().decode())
+            art_hash = channel_data['data'][0]['url'].split('/')[-1]
+            art_data_url = 'https://www.artstation.com/projects/{}.json'.format(art_hash)
+            art_data_req = request.Request(art_data_url, headers=req_heads)
+            art_data = json.loads(request.urlopen(art_data_req).read().decode())
+            art_url = art_data['assets'][0]['image_url']
+            pub_date = datetime.datetime.strptime(art_data['published_at'][:10], '%Y-%m-%d').date()
+            if pub_date >= datetime.date.today() - datetime.timedelta(days=1):
+                return art_url
+            else:
+                results.append((pub_date, art_url))
+    return sorted(results, key=lambda x: x[0])[-1][1]
 
 
 def get_bing_url() -> str or None:
@@ -215,8 +238,8 @@ def exit_with_error(error_code: int, error_text: str):
 
 if __name__ == '__main__':
     wp_sources = {
+        'artstation': get_artstation_url,
         'bing': get_bing_url,
-        '35photo': get_35photo_url,
         'nasa': get_nasa_url,
         'esa': get_esa_url,
         'astropix': get_astropix_url,

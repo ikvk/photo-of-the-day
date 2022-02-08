@@ -8,6 +8,7 @@ get_url_fn_set = {
     get_astropix_url,
     get_geo_url,
     get_esa_url,
+    get_artstation_url,
 }
 
 
@@ -28,13 +29,11 @@ def download_all():
 def view_all_in_browser():
     for url in get_all_urls():
         if url:
-            webbrowser.open(url, new=2)
+            webbrowser.open_new_tab(url)
 
 
 # get_all_urls()
-view_all_in_browser()
+# view_all_in_browser()
 # download_all()
 # print(get_yandex_url())
-# print(get_geo_url())
-
-# https://www.deviantart.com/topic/science-fiction
+# print(get_artstation_url())

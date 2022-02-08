@@ -7,8 +7,9 @@ This is python 3 script without dependencies.
 
 Available sources:
 ------------------
-- **Bing** - https://www.bing.com/
 - **35photo** - https://ru.35photo.pro/rating/photo_day/
+- **artstation** - https://www.artstation.com
+- **Bing** - https://www.bing.com/
 - **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
 - **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
 - **National geographic** - https://www.nationalgeographic.com/photography/photo-of-the-day/?source=sitenavpod
@@ -20,6 +21,7 @@ Usage:
 ::
 
     pythonw wallpaper.py 35photo
+    pythonw wallpaper.py artstation
     pythonw wallpaper.py bing
     pythonw wallpaper.py nasa
     pythonw wallpaper.py astropix
