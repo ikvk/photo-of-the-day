@@ -12,7 +12,7 @@ Available sources:
 - **Bing** - https://www.bing.com/
 - **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
 - **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
-- **National geographic** - https://www.nationalgeographic.com/photography/photo-of-the-day/?source=sitenavpod
+- **National geographic** - https://www.nationalgeographic.co.uk/photo-of-day
 - **ESA** - http://www.esa.int/ESA_Multimedia/Images
 
 Usage:
