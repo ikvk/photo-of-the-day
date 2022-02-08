@@ -29,7 +29,7 @@ def download_image_by_url(img_url: str, local_path: str) -> bool:
         return False
 
 
-def get_artstation_url():
+def get_artstation_url() -> str or None:
     channels = {  # noqa
         70: 'Abstract',
         69: 'Anatomy',
@@ -115,7 +115,7 @@ def get_artstation_url():
                 return art_url
             else:
                 results.append((pub_date, art_url))
-    return sorted(results, key=lambda x: x[0])[-1][1]
+    return sorted(results, key=lambda x: x[0])[-1][1] or None
 
 
 def get_bing_url() -> str or None:

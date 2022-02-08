@@ -8,7 +8,7 @@ This is python 3 script without dependencies.
 Available sources:
 ------------------
 - **35photo** - https://ru.35photo.pro/rating/photo_day/
-- **artstation** - https://www.artstation.com
+- **Artstation** - https://www.artstation.com
 - **Bing** - https://www.bing.com/
 - **NASA IOTD** - https://www.nasa.gov/multimedia/imagegallery/iotd.html
 - **NASA APOD** - https://apod.nasa.gov/apod/astropix.html
