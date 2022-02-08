@@ -7,7 +7,6 @@ import datetime
 from urllib import request, parse
 
 PATH_TO_SAVE_WALLPAPER = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
-SLEEP_AFTER_ERROR_SEC = 2
 
 
 def set_win10_wallpaper(local_path: str):
@@ -232,7 +231,13 @@ def get_esa_url() -> str or None:
 
 def exit_with_error(error_code: int, error_text: str):
     print(error_text)
-    time.sleep(SLEEP_AFTER_ERROR_SEC)
+    py_path = sys.executable or ''  # absolute path of the executable binary for the Python interpreter
+    if py_path.endswith('pythonw.exe') or py_path.endswith('pythonw'):
+        # now console
+        time.sleep(3)
+    else:
+        # visible console
+        pass
     exit(error_code)
 
 
