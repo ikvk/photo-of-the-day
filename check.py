@@ -1,20 +1,10 @@
 from wallpaper import *
 import webbrowser
 
-get_url_fn_set = {
-    get_bing_url,
-    get_35photo_url,
-    get_nasa_url,
-    get_astropix_url,
-    get_geo_url,
-    get_esa_url,
-    get_artstation_url,
-}
-
 
 def get_all_urls():
     result = []
-    for get_func in get_url_fn_set:
+    for get_func in WP_SOURCE_MAP.values():
         url = get_func()
         print(get_func, url)
         result.append(url)
@@ -22,7 +12,7 @@ def get_all_urls():
 
 
 def download_all():
-    for get_func in get_url_fn_set:
+    for get_func in WP_SOURCE_MAP.values():
         print(get_func, download_image_by_url(get_func(), PATH_TO_SAVE_WALLPAPER))
 
 

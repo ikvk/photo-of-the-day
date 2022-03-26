@@ -94,7 +94,7 @@ def get_artstation_url() -> str or None:
         6278: 'The Art of  Rainbow6 Extraction',
         6291: "The Art of Marvel's  Guardians of the  Galaxy"
     }
-    channel_white_list = [95, 101, 79, 81, 100, 92, 110, 126]
+    channel_white_list = [101, 95, 79, 81, 100, 92, 110, 126]
     channel_data_url = 'https://www.artstation.com/api/v2/community/channels/projects.json?' \
                        'channel_id={}&page=1&sorting=trending&dimension=all&per_page=30'
     req_heads = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0", }
@@ -241,25 +241,25 @@ def exit_with_error(error_code: int, error_text: str):
     exit(error_code)
 
 
-if __name__ == '__main__':
-    wp_sources = {
-        '35photo': get_35photo_url,
-        'artstation': get_artstation_url,
-        'bing': get_bing_url,
-        'nasa': get_nasa_url,
-        'esa': get_esa_url,
-        'astropix': get_astropix_url,
-        'geo': get_geo_url,
-    }
+WP_SOURCE_MAP = {
+    '35photo': get_35photo_url,
+    'artstation': get_artstation_url,
+    'bing': get_bing_url,
+    'nasa': get_nasa_url,
+    'esa': get_esa_url,
+    'astropix': get_astropix_url,
+    'geo': get_geo_url,
+}
 
+if __name__ == '__main__':
     # get source name
     source_name = ''
-    if len(sys.argv) > 1 and sys.argv[1] in wp_sources:
+    if len(sys.argv) > 1 and sys.argv[1] in WP_SOURCE_MAP:
         source_name = sys.argv[1]
         print('Source "{}" selected.'.format(source_name))
     else:
-        exit_with_error(1, 'Choose wallpaper source name, available: [{}]'.format(', '.join(wp_sources.keys())))
-    get_url_function = wp_sources[source_name]
+        exit_with_error(1, 'Choose wallpaper source name, available: [{}]'.format(', '.join(WP_SOURCE_MAP.keys())))
+    get_url_function = WP_SOURCE_MAP[source_name]
     # get url
     wallpaper_url = get_url_function()
     if wallpaper_url:
