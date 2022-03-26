@@ -243,6 +243,7 @@ def exit_with_error(error_code: int, error_text: str):
 
 if __name__ == '__main__':
     wp_sources = {
+        '35photo': get_35photo_url,
         'artstation': get_artstation_url,
         'bing': get_bing_url,
         'nasa': get_nasa_url,

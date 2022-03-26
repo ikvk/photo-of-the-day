@@ -33,7 +33,7 @@ def view_all_in_browser():
 
 
 # get_all_urls()
-# view_all_in_browser()
+view_all_in_browser()
 # download_all()
 # print(get_yandex_url())
 # print(get_artstation_url())
