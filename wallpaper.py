@@ -97,7 +97,10 @@ def get_artstation_url() -> str or None:
     channel_white_list = [101, 95, 79, 81, 100, 92, 110, 126]
     channel_data_url = 'https://www.artstation.com/api/v2/community/channels/projects.json?' \
                        'channel_id={}&page=1&sorting=trending&dimension=all&per_page=30'
-    req_heads = {'User-Agent': "Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:95.0) Gecko/20100101 Firefox/95.0", }
+    req_heads = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:97.0) Gecko/20100101 Firefox/97.0',
+    }
+
     results = []
     for channel_id in channel_white_list:
         channel_data_req = request.Request(channel_data_url.format(channel_id), headers=req_heads)
