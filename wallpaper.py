@@ -227,7 +227,7 @@ def get_esa_url() -> str or None:
                 url2_match = re.search(
                     r'<meta\s+property=\"og:image\"\s+content=\"(?P<url>.+?)\"',
                     page2_data.read().decode(), re.IGNORECASE)
-                if url1_match:
+                if url2_match:
                     return url2_match.groupdict()['url']
     return None
 
