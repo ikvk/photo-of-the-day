@@ -22,8 +22,8 @@ def view_all_in_browser():
             webbrowser.open_new_tab(url)
 
 
-# get_all_urls()
 view_all_in_browser()
+# get_all_urls()
 # download_all()
 # print(get_yandex_url())
 # print(download_image_by_url(get_artstation_url(), PATH_TO_SAVE_WALLPAPER))  # 403
