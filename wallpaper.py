@@ -6,7 +6,8 @@ import ctypes
 import datetime
 from urllib import request, parse
 
-PATH_TO_SAVE_WALLPAPER = r'C:\Windows\Temp\_wallpaper_of_day.jpg'
+WP_SAVE_PATH = 'C:/Windows/Temp/'
+WP_FILE_NAME_PREFIX = '_wallpaper_of_day_'  # without extension
 
 
 def set_win10_wallpaper(local_path: str):
@@ -15,17 +16,36 @@ def set_win10_wallpaper(local_path: str):
     return ctypes.windll.user32.SystemParametersInfoW(spi_setdeskwallpaper, 0, local_path, spif_updateinifile)
 
 
-def download_image_by_url(img_url: str, local_path: str) -> bool:
+def identify_image_type(data: bytes) -> str:
+    if len(data) > 2 and data[0:2] == b'BM':
+        return 'bmp'
+    if len(data) > 6 and data[:6] in [b'GIF87a', b'GIF89a']:
+        return 'gif'
+    if len(data) > 4 and data[0] == 0x89 and data[1:4] == b'PNG':
+        return 'png'
+    if len(data) > 3 and data[0] == 0xff and data[1] == 0xd8 and data[2] == 0xff:
+        return 'jpeg'
+    if len(data) > 12 and data[0:4] == b'RIFF' and data[8:12] == b'WEBP':
+        return 'webp'
+    return 'jpg'
+
+
+def download_image_by_url(img_url: str, save_path: str, file_name: str) -> str:
+    """
+    :return: file_name if success else ""
+    """
     wb_data = request.urlopen(img_url)
     if wb_data.code == 200:
         try:
-            with open(local_path, 'wb') as f:
-                f.write(wb_data.read())
+            img_bytes = wb_data.read()
+            img_name = '{}.{}'.format(file_name, identify_image_type(img_bytes))
+            with open(save_path + img_name, 'wb') as f:
+                f.write(img_bytes)
+            return img_name
         except IOError:
-            return False
-        return True
+            return ''
     else:
-        return False
+        return ''
 
 
 def get_artstation_url() -> str or None:
@@ -180,16 +200,14 @@ def get_35photo_url() -> str or None:
 
 
 def get_nasa_url() -> str or None:
-    base_url = 'https://www.nasa.gov'
-    ubernodes_url = '{}/api/1/query/ubernodes.json?unType[]=image&routes[]=1446'.format(base_url)
-    ubernodes_data = request.urlopen(ubernodes_url)
-    if ubernodes_data.code == 200:
-        ubernodes = json.loads(ubernodes_data.read().decode())
-        node_url = '{}/api/1/record/node/{}.json'.format(base_url, ubernodes['ubernodes'][0]['nid'])
-        node_data = request.urlopen(node_url)
-        if node_data.code == 200:
-            node = json.loads(node_data.read().decode())
-            return '{}{}'.format(base_url, node['images'][0]['fullWidthFeature'])
+    iotd_url = 'https://www.nasa.gov/image-of-the-day/'
+    iotd_data = request.urlopen(iotd_url)
+    if iotd_data.code == 200:
+        # *в ссылке .jpg, в _headers ('Content-Type', 'image/jpeg'), по факту там есть png, jpg, webp ...
+        url_match = re.search(
+            r'<img\s+src=\"(?P<url>.+?)\".+?loading=\"lazy\"', iotd_data.read().decode(), re.IGNORECASE)
+        if url_match:
+            return url_match.groupdict()['url']
     return None
 
 
@@ -270,13 +288,15 @@ if __name__ == '__main__':
     else:
         exit_with_error(2, 'Failed to retrieve image url for download.')
     # download image
-    is_downloaded = download_image_by_url(wallpaper_url, PATH_TO_SAVE_WALLPAPER)
-    if is_downloaded:
-        print('Image saved to: "{}"'.format(PATH_TO_SAVE_WALLPAPER))
+    wp_file_name = download_image_by_url(wallpaper_url, WP_SAVE_PATH, WP_FILE_NAME_PREFIX + source_name)
+    wp_full_path = ''
+    if wp_file_name:
+        wp_full_path = WP_SAVE_PATH + wp_file_name
+        print('Image saved to: "{}"'.format(wp_full_path))
     else:
         exit_with_error(3, 'Failed to downloading wallpaper image.')
     # set wallpaper
-    set_wp_result = set_win10_wallpaper(PATH_TO_SAVE_WALLPAPER)
+    set_wp_result = set_win10_wallpaper(wp_full_path)
     if set_wp_result == 1:
         print('Wallpaper installed successfully.')
     else:
