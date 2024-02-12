@@ -17,6 +17,7 @@ def set_win10_wallpaper(local_path: str):
 
 
 def identify_image_type(data: bytes) -> str:
+    # *заголовки ответа часто врут
     if len(data) > 2 and data[0:2] == b'BM':
         return 'bmp'
     if len(data) > 6 and data[:6] in [b'GIF87a', b'GIF89a']:
