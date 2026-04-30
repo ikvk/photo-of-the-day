@@ -32,7 +32,7 @@ def view_all_in_browser():
 # view_all_in_browser()
 # get_all_urls()
 # download_all()
-# print(get_yandex_url())
+# print(get_geo_url())
 # print(download_image_by_url(get_artstation_url(), PATH_TO_SAVE_WALLPAPER))  # 403
 
 # with open('C:/kvk/Загрузки/1.webp', 'rb') as f:
